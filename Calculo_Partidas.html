@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cálculo de Win Rate</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #2f3640;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #0984e3;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #74b9ff;
+    }
+    .resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background: #dfe6e9;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Win Rate</h1>
+    
+    <label for="partidas">Total de partidas jogadas:</label>
+    <input type="number" id="partidas" placeholder="Ex: 203">
+    
+    <label for="taxaAtual">Win Rate atual (%):</label>
+    <input type="number" id="taxaAtual" placeholder="Ex: 68">
+    
+    <label for="objetivo">Win Rate desejada (%):</label>
+    <input type="number" id="objetivo" placeholder="Ex: 70">
+    
+    <button onclick="calcular()">Calcular</button>
+    
+    <div id="saida" class="resultado" style="display:none;"></div>
+  </div>
+  
+  <script>
+    function calcular() {
+      const partidas = parseInt(document.getElementById("partidas").value);
+      const taxaAtual = parseFloat(document.getElementById("taxaAtual").value) / 100;
+      const objetivo = parseFloat(document.getElementById("objetivo").value) / 100;
+      
+      if (isNaN(partidas) || isNaN(taxaAtual) || isNaN(objetivo) || objetivo <= 0 || objetivo >= 1) {
+        alert("Preencha os campos corretamente!");
+        return;
+      }
+      
+      const vitorias = Math.round(partidas * taxaAtual);
+      const derrotas = partidas - vitorias;
+      const atual = (vitorias / partidas) * 100;
+      
+      // vitórias necessárias para atingir a taxa desejada
+      let x = Math.ceil((objetivo * partidas - vitorias) / (1 - objetivo));
+      if (x < 0) x = 0;
+      
+      let mensagem = `
+        📊 Situação Atual:<br>
+        - Vitórias: ${vitorias}<br>
+        - Derrotas: ${derrotas}<br>
+        - Win Rate: ${atual.toFixed(2)}%<br><br>
+        
+        🎯 Para atingir ${objetivo * 100}%:<br>
+        - Precisa ganhar <b>${x}</b> partidas seguidas sem perder.
+      `;
+      
+      document.getElementById("saida").innerHTML = mensagem;
+      document.getElementById("saida").style.display = "block";
+    }
+  </script>
+</body>
+</html>
