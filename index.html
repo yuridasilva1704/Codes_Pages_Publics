@@ -110,7 +110,7 @@
 </head>
 <body>
   
-   <!-- Contador de visitas -->
+  <!-- Contador de visitas -->
   <div id="contadorVisitas" style="
     margin-bottom: 20px;
     font-size: 1rem;
@@ -175,22 +175,22 @@
     <div id="saidaMMR" class="resultado" style="display:none;"></div>
   </div>
 
-<footer style="
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #00cec9;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 10px 15px;
-  border-radius: 12px;
-  border: 2px solid #00cec9;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-">
-  Desenvolvido por Yuri (Main Alucard que sempre te carrega 😎)
-</footer>
+  <footer style="
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #00cec9;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: 2px solid #00cec9;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  ">
+    Desenvolvido por Yuri (Main Alucard que sempre te carrega 😎)
+  </footer>
 
-  
   <script>
+    // Função Win Rate
     function calcularWinRate() {
       const partidas = parseInt(document.getElementById("partidas").value);
       const taxaAtual = parseFloat(document.getElementById("taxaAtual").value) / 100;
@@ -221,6 +221,7 @@
       document.getElementById("saidaWR").style.display = "block";
     }
 
+    // Função MMR
     function calcularMMR() {
       const elo = parseInt(document.getElementById("elo").value);
       const mmrAtual = parseInt(document.getElementById("mmrAtual").value);
@@ -246,13 +247,14 @@
       
       document.getElementById("saidaMMR").innerHTML = mensagem;
       document.getElementById("saidaMMR").style.display = "block";
-
-  let visitas = localStorage.getItem('visitasSite');
-  if(!visitas) visitas = 0;
-  visitas = parseInt(visitas) + 1;
-  localStorage.setItem('visitasSite', visitas);
-  document.getElementById('contadorVisitas').innerText = `🔥 Visitas no site: ${visitas}`;
     }
+
+    // Contador de visitas (roda assim que a página carrega)
+    let visitas = localStorage.getItem('visitasSite');
+    if(!visitas) visitas = 0;
+    visitas = parseInt(visitas) + 1;
+    localStorage.setItem('visitasSite', visitas);
+    document.getElementById('contadorVisitas').innerText = `🔥 Visitas no site: ${visitas}`;
   </script>
 </body>
 </html>
