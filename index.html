@@ -3,43 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cálculo de Win Rate</title>
+  <title>Calculadora de Win Rate & MMR</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      color: #2f3640;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1e272e;
+      color: #f5f6fa;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      padding: 20px;
       margin: 0;
     }
-    .container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-    }
     h1 {
-      font-size: 1.5rem;
+      font-size: 2rem;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      color: #00cec9;
+    }
+    .container {
+      background: #2f3640;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 450px;
+      margin-bottom: 30px;
+      border: 2px solid #00cec9;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
     }
     label {
       font-weight: bold;
       display: block;
       margin-top: 10px;
+      color: #dfe6e9;
     }
-    input {
+    input, select {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       margin-top: 5px;
       border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+      border: none;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 5px #00cec9;
     }
     button {
       margin-top: 15px;
@@ -47,27 +60,61 @@
       padding: 12px;
       font-size: 1rem;
       border: none;
-      border-radius: 8px;
-      background: #0984e3;
-      color: white;
+      border-radius: 10px;
+      background: #00cec9;
+      color: #2d3436;
       cursor: pointer;
       font-weight: bold;
+      transition: 0.3s;
     }
     button:hover {
-      background: #74b9ff;
+      background: #81ecec;
     }
     .resultado {
-      margin-top: 20px;
-      padding: 15px;
+      margin-top: 15px;
+      padding: 12px;
       background: #dfe6e9;
+      color: #2d3436;
       border-radius: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
+    }
+    .info {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #ffeaa7;
+      background: #636e72;
+      padding: 8px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    /* Responsivo */
+    @media(max-width: 500px){
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.7rem;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
+      input, select, button {
+        font-size: 0.9rem;
+      }
+      .resultado {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
+
+  <h1>Calculadora Mobile Legends</h1>
+
+  <!-- Calculadora Win Rate -->
   <div class="container">
-    <h1>Calculadora de Win Rate</h1>
+    <h2 style="color:#00cec9; text-align:center;">Win Rate</h2>
     
     <label for="partidas">Total de partidas jogadas:</label>
     <input type="number" id="partidas" placeholder="Ex: 203">
@@ -78,13 +125,43 @@
     <label for="objetivo">Win Rate desejada (%):</label>
     <input type="number" id="objetivo" placeholder="Ex: 70">
     
-    <button onclick="calcular()">Calcular</button>
+    <button onclick="calcularWinRate()">Calcular Win Rate</button>
     
-    <div id="saida" class="resultado" style="display:none;"></div>
+    <div id="saidaWR" class="resultado" style="display:none;"></div>
+  </div>
+
+  <!-- Calculadora MMR -->
+  <div class="container">
+    <h2 style="color:#00cec9; text-align:center;">MMR</h2>
+
+    <div class="info">
+      ⚠️ Estes dados são apenas estimativos e se aproximam da realidade do jogo a partir da experiência de jogo e dos números que você compartilhou. Não refletem o MMR real oficial.
+    </div>
+    
+    <label for="elo">Elo:</label>
+    <select id="elo">
+      <option value="5">Grande Mestre</option>
+      <option value="15">Épico</option>
+      <option value="20">Lenda</option>
+      <option value="55">Mítico</option>
+      <option value="60">Honra Mítica</option>
+      <option value="65">Glória</option>
+      <option value="70">Mítico Imortal</option>
+    </select>
+    
+    <label for="mmrAtual">MMR atual:</label>
+    <input type="number" id="mmrAtual" placeholder="Ex: 5500">
+    
+    <label for="mmrObjetivo">MMR objetivo:</label>
+    <input type="number" id="mmrObjetivo" placeholder="Ex: 6000">
+    
+    <button onclick="calcularMMR()">Calcular MMR</button>
+    
+    <div id="saidaMMR" class="resultado" style="display:none;"></div>
   </div>
   
   <script>
-    function calcular() {
+    function calcularWinRate() {
       const partidas = parseInt(document.getElementById("partidas").value);
       const taxaAtual = parseFloat(document.getElementById("taxaAtual").value) / 100;
       const objetivo = parseFloat(document.getElementById("objetivo").value) / 100;
@@ -98,7 +175,6 @@
       const derrotas = partidas - vitorias;
       const atual = (vitorias / partidas) * 100;
       
-      // vitórias necessárias para atingir a taxa desejada
       let x = Math.ceil((objetivo * partidas - vitorias) / (1 - objetivo));
       if (x < 0) x = 0;
       
@@ -107,13 +183,39 @@
         - Vitórias: ${vitorias}<br>
         - Derrotas: ${derrotas}<br>
         - Win Rate: ${atual.toFixed(2)}%<br><br>
-        
         🎯 Para atingir ${objetivo * 100}%:<br>
         - Precisa ganhar <b>${x}</b> partidas seguidas sem perder.
       `;
       
-      document.getElementById("saida").innerHTML = mensagem;
-      document.getElementById("saida").style.display = "block";
+      document.getElementById("saidaWR").innerHTML = mensagem;
+      document.getElementById("saidaWR").style.display = "block";
+    }
+
+    function calcularMMR() {
+      const elo = parseInt(document.getElementById("elo").value);
+      const mmrAtual = parseInt(document.getElementById("mmrAtual").value);
+      const mmrObjetivo = parseInt(document.getElementById("mmrObjetivo").value);
+      
+      if (isNaN(mmrAtual) || isNaN(mmrObjetivo) || elo <= 0) {
+        alert("Preencha os campos corretamente!");
+        return;
+      }
+      
+      const pontosMedios = elo;
+      const diferenca = mmrObjetivo - mmrAtual;
+      const vitoriasNecessarias = Math.ceil(diferenca / pontosMedios);
+      
+      let mensagem = `
+        📊 Situação Atual:<br>
+        - Elo selecionado: ${document.getElementById("elo").options[document.getElementById("elo").selectedIndex].text}<br>
+        - MMR Atual: ${mmrAtual}<br>
+        - MMR Objetivo: ${mmrObjetivo}<br><br>
+        🎯 Para atingir o objetivo:<br>
+        - Precisa ganhar <b>${vitoriasNecessarias}</b> vitórias.
+      `;
+      
+      document.getElementById("saidaMMR").innerHTML = mensagem;
+      document.getElementById("saidaMMR").style.display = "block";
     }
   </script>
 </body>
