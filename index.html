@@ -109,7 +109,22 @@
   </style>
 </head>
 <body>
-
+  
+   <!-- Contador de visitas -->
+  <div id="contadorVisitas" style="
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #ffeaa7;
+    background: #2d3436;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 2px solid #ffeaa7;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  ">
+    Carregando contador de visitas...
+  </div>
+  
   <h1>Calculadora Mobile Legends</h1>
 
   <!-- Calculadora Win Rate -->
@@ -231,6 +246,12 @@
       
       document.getElementById("saidaMMR").innerHTML = mensagem;
       document.getElementById("saidaMMR").style.display = "block";
+
+  let visitas = localStorage.getItem('visitasSite');
+  if(!visitas) visitas = 0;
+  visitas = parseInt(visitas) + 1;
+  localStorage.setItem('visitasSite', visitas);
+  document.getElementById('contadorVisitas').innerText = `🔥 Visitas no site: ${visitas}`;
     }
   </script>
 </body>
